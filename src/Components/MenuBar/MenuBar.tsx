@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Link, Routes, Route } from 'react-router-dom';
 import '../MenuBar/MenuBar.css'
-import logo from'./icon/logo.svg'
+import logo from './icon/logo.svg'
+import DatVe from '../../Pages/DatVe/DatVe';
 
 const MenuBar = () => {
     const [showData, setShowData] = useState(false);
@@ -17,7 +18,7 @@ const MenuBar = () => {
             <div className='container'>
                 <div className='menu-bar'>
                     <div className='logomenu'>
-                    <img src={logo} alt="logo" className='image' />
+                        <img src={logo} alt="logo" className='image' />
                     </div>
 
                     <nav>
@@ -126,7 +127,7 @@ const MenuBar = () => {
                                         <h2>Danh sách vé</h2>
                                     </div>
                                     <div className='ct-2'>
-                                        <p>đây là trang quản lý vé</p>
+                                        <DatVe></DatVe>
                                     </div>
                                     <div className='ct-3'>
                                     </div>
@@ -164,7 +165,8 @@ const MenuBar = () => {
                 </div>
             </div>
 
-
+            
+   
         </BrowserRouter >
     );
 };
