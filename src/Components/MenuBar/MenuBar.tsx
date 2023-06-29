@@ -3,6 +3,7 @@ import { BrowserRouter, Link, Routes, Route } from 'react-router-dom';
 import '../MenuBar/MenuBar.css'
 import logo from './icon/logo.svg'
 import DatVe from '../../Pages/DatVe/DatVe';
+import DoiVe from '../../Pages/DoiVe/DoiVe';
 
 const MenuBar = () => {
     const [showData, setShowData] = useState(false);
@@ -141,7 +142,7 @@ const MenuBar = () => {
                                     <h2>Đổi soát vé</h2>
                                 </div>
                                 <div className='ct-2'>
-                                    <p>đây là trang đổi soát vé</p>
+                                    <DoiVe></DoiVe>
                                 </div>
                                 <div className='ct-3'>
                                 </div>

@@ -51,13 +51,9 @@ const DatVe = () => {
                             return aIndex - bIndex;
                         },
                     },
-                    { title: "Booking code", dataIndex: "Code", key: "Code" },
                     { title: "Số vé", dataIndex: "SoVe", key: "SoVe" },
-                    { title: "Tên sự kiện", dataIndex: "TenSK", key: "TenSK" },
-                    { title: "Tình trạng sử dụng", dataIndex: "TinhTrangSuDung", key: "TinhTrangSuDung", render: renderTinhTrangSuDung, },
-
                     { title: "Ngày sử dụng", dataIndex: "NgaySuDung", key: "NgaySuDung" },
-                    { title: "Ngày xuất vé", dataIndex: "NgayXuatVe", key: "NgayXuatVe" },
+                    { title: "Tên loại vé", dataIndex: "LoaiVe", key: "LoaiVe" },
                     { title: "Cổng check - in", dataIndex: "CongCheckIn", key: "CongCheckIn" },
                 ]}
                 rowKey="MaTB"
