@@ -4,6 +4,7 @@ import '../MenuBar/MenuBar.css'
 import logo from './icon/logo.svg'
 import DatVe from '../../Pages/DatVe/DatVe';
 import DoiVe from '../../Pages/DoiVe/DoiVe';
+import GoiVe from '../../Pages/CaiDat/GoiVe';
 
 const MenuBar = () => {
     const [showData, setShowData] = useState(false);
@@ -152,7 +153,7 @@ const MenuBar = () => {
                         <Route path="/setting" element={<>
                             <div className='content-inside'>
                                 <div className='ct-1'>
-                                    <h2>Danh sách gói vé</h2>
+                                    <GoiVe></GoiVe>
                                 </div>
                                 <div className='ct-2'>
                                     <p>Đây là trang danh sách gói vé</p>
