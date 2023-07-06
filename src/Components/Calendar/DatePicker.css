@@ -1,0 +1,6 @@
+.custom-dropdown .ant-picker-panel {
+    width: 300px; /* hoặc kích thước phù hợp với thiết kế của bạn */
+  }
+  .custom-dropdown .ant-picker-panel > *:not(:last-child) {
+    display: none;
+  }

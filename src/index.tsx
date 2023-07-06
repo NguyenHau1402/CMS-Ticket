@@ -2,6 +2,7 @@
 import ReactDOM from 'react-dom/client';
 import MenuBar from './Components/MenuBar/MenuBar';
 import DatVe from './Pages/DatVe/DatVe';
+import { Calendar, DatePicker } from 'antd';
 
 
 const root = ReactDOM.createRoot(
@@ -9,6 +10,6 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <div>
-    <MenuBar></MenuBar>
+    <DatePicker></DatePicker>
   </div>
 )
