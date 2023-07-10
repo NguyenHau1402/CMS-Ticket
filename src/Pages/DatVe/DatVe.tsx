@@ -37,7 +37,6 @@ const DatVe = () => {
             </Tag>
         );
     };
-
     return (
         <>
             <Table

@@ -37,7 +37,6 @@ const GoiVe = () => {
             </Tag>
         );
     };
-
     return (
         <>
             <Table
