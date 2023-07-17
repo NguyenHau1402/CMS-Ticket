@@ -2,6 +2,7 @@
 import ReactDOM from 'react-dom/client';
 import MenuBar from './Components/MenuBar/MenuBar';
 import { Calendar, DatePicker } from 'antd';
+import QuanLyVe from './Pages/QuanLyVe/QuanLyVe';
 
 
 const root = ReactDOM.createRoot(
@@ -9,6 +10,6 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <div>
-    <Calendar></Calendar>
+    <QuanLyVe></QuanLyVe>
   </div>
 )
