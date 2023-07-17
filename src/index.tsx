@@ -11,6 +11,6 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <div>
-    <DoiSoatVe></DoiSoatVe>
+    <MenuBar></MenuBar>
   </div>
 )

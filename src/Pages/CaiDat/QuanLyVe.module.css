@@ -11,6 +11,8 @@
   border-radius: 8px;
   gap: 10px;
   border: 2px solid orange;
+
+
 }
 
 .btn:hover {
@@ -31,14 +33,10 @@
 
 .filterItem {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 10px;
 }
 
-.filterItem span {
-  margin-bottom: 5px;
-}
 .checkboxGroupContainer {
   display: flex;
   flex-direction: column;
@@ -74,30 +72,4 @@
   opacity: 0.3;
 }
 
-.container {
-  display: flex;
-}
-
-.tablecontainer {
-  flex: 1 0 70%;
-  border-radius: 10px;
-}
-
-
-.filterLabel {
-  font-weight: bold;
-  margin-right: 10px;
-  display: block;
-}
-
-.filterCheckbox {
-  margin-right: 5px;
-}
-.btnfm{
-  width: 70px;
-  height: 50px;
-  color: orange;
-  border-color: orange;
-  margin-top: 20px;
-  margin-left: 100px;
-}
+.buttonFilter {}

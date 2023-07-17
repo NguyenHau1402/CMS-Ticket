@@ -19,7 +19,7 @@ const DoiSoatVe = () => {
     const [dateRange, setDateRange] = useState<any[]>([]);
     const [tinhTrangDoiSoat, setTinhTrangDoiSoat] = useState<CheckboxValueType[]>([]);
     const [disableTinhTrangDoiSoat, setDisableTinhTrangDoiSoat] = useState(false);
-    const [isAllTinhTrangDoiSoat, setIsAllTinhTrangDoiSoat] = useState(false);
+    const [isAllTinhTrangDoiSoatChecked, setIsAllTinhTrangDoiSoatChecked] = useState(false);
 
     useEffect(() => {
         const colRef = collection(db, "QuanLyVe");
@@ -66,16 +66,15 @@ const DoiSoatVe = () => {
         setDateRange(dates);
     };
 
-    const handleTinhTrangDoiSoat = (values: any[]) => {
+    const handleTinhTrangDoiSoatChange = (values: any[]) => {
         setTinhTrangDoiSoat(values);
     };
 
-    const handleAllTinhTrangDoiSoat = (e: CheckboxChangeEvent) => {
+    const handleAllTinhTrangDoiSoatChange = (e: CheckboxChangeEvent) => {
         const isChecked = e.target.checked;
-        setIsAllTinhTrangDoiSoat(isChecked);
+        setIsAllTinhTrangDoiSoatChecked(isChecked);
         setDisableTinhTrangDoiSoat(isChecked);
         setTinhTrangDoiSoat(isChecked ? ["Tất cả"] : []);
-        setDisableTinhTrangDoiSoat(isChecked);
     };
 
     const tinhTrangDoiSoatOptions = [
@@ -99,17 +98,17 @@ const DoiSoatVe = () => {
         }
 
         // Lọc theo tình trạng sử dụng
-       
+
 
         // Lọc theo cổng check-in
         if (tinhTrangDoiSoat && tinhTrangDoiSoat.length > 0) {
             results = results.filter((user) =>
-            tinhTrangDoiSoat.includes(user.TinhTrangDoiSoat)
+                tinhTrangDoiSoat.includes(user.TinhTrangDoiSoat)
             );
         }
 
         setSearchResult(results);
-        
+
     };
 
     const handleExportToExcel = () => {
@@ -119,22 +118,22 @@ const DoiSoatVe = () => {
             // Định dạng dữ liệu cho từng cột
             STT: user.STT,
             "Số vé": user.SoVe,
-           
+
             "Ngày sử dụng": user.NgaySuDung,
             "Tên loại vé": user.LoaiVe,
             "Cổng check - in": user.CongCheckIn,
-            "": user.TinhTrangDoiSoat,
+            "Tình trạng đổi soát": user.TinhTrangDoiSoat,
         }));
 
         // Định nghĩa các cột cho file CSV
         const csvHeaders = [
             { label: "STT", key: "STT" },
-            
+
             { label: "Số vé", key: "Số vé" },
             { label: "Ngày sử dụng", key: "Ngày sử dụng" },
             { label: "Tên loại vé", key: "Tên loại vé" },
             { label: "Cổng check - in", key: "Cổng check - in" },
-            { label: "Tình trạng đổi soát", key: "Tình trạng đổi soát"},
+            { label: "Tình trạng đổi soát", key: "Tình trạng đổi soát" },
         ];
 
         // JSX của nút xuất file CSV
@@ -173,52 +172,94 @@ const DoiSoatVe = () => {
                     {handleExportToExcel()}
                 </div>
             </div>
+            <div className={styles.container}>
+                <div className={styles.tablecontainer}>
+                    <Table
+                        dataSource={searchResult.length > 0 ? searchResult : userList}
+                        columns={[
+                            { title: "STT", dataIndex: "STT", key: "STT" },
+                            { title: "Số vé", dataIndex: "SoVe", key: "SoVe" },
+                            { title: "Ngày sử dụng", dataIndex: "NgaySuDung", key: "NgaySuDung" },
+                            { title: "Tên loại vé", dataIndex: "LoaiVe", key: "LoaiVe" },
+                            { title: "Cổng check - in", dataIndex: "CongCheckIn", key: "CongCheckIn" },
+                            {
+                                title: "",
+                                dataIndex: "TinhTrangDoiSoat",
+                                key: "TinhTrangDoiSoat",
 
-            <Table
-                dataSource={searchResult.length > 0 ? searchResult : userList}
-                columns={[
-                    { title: "STT", dataIndex: "STT", key: "STT" },
-                    { title: "Số vé", dataIndex: "SoVe", key: "SoVe" },
-                    { title: "Ngày sử dụng", dataIndex: "NgaySuDung", key: "NgaySuDung" },
-                    { title: "Tên loại vé", dataIndex: "LoaiVe", key: "LoaiVe" },
-                    { title: "Cổng check - in", dataIndex: "CongCheckIn", key: "CongCheckIn" },
-                    {
-                        title: "",
-                        dataIndex: "TinhTrangDoiSoat",
-                        key: "TinhTrangDoiSoat",
+                                render: (renderTinhTrangDoiSoat) => {
+                                    let color = "gray";
 
-                        render: (renderTinhTrangDoiSoat) => {
-                            let color = "gray";
-                        
-                            if (renderTinhTrangDoiSoat === "Đã đổi soát") {
-                              color = "red";
-                            }
-                        
-                            return (
-                              <span style={{ color, fontStyle: 'italic' }}>
-                                {renderTinhTrangDoiSoat}
-                              </span>
-                            );
-                          },
-                    },
-                ]}
-                rowKey="MaTB"
-                pagination={{
-                    className: styles.customPagination,
-                    style: {
-                        position: "fixed",
-                        left: "50%",
-                        bottom: "5px",
-                        transform: "translateX(-50%)",
-                    },
-                    itemRender: (page, type, originalElement) => {
-                        if (type === "page") {
-                            return <span style={{ color: "orange" }}>{page}</span>;
-                        }
-                        return originalElement;
-                    },
-                }}
-            />
+                                    if (renderTinhTrangDoiSoat === "Đã đổi soát") {
+                                        color = "red";
+                                    }
+
+                                    return (
+                                        <span style={{ color, fontStyle: 'italic' }}>
+                                            {renderTinhTrangDoiSoat}
+                                        </span>
+                                    );
+                                },
+                            },
+                        ]}
+                        rowKey="MaTB"
+                        pagination={{
+                            className: styles.customPagination,
+                            style: {
+                                position: "fixed",
+                                left: "50%",
+                                bottom: "5px",
+                                transform: "translateX(-50%)",
+                            },
+                            itemRender: (page, type, originalElement) => {
+                                if (type === "page") {
+                                    return <span style={{ color: "orange" }}>{page}</span>;
+                                }
+                                return originalElement;
+                            },
+                        }}
+                    />
+                </div>
+
+                <div className={styles.filterItem}>
+                    <span className={styles.filterLabel}>Trạng thái Soát vé:</span>
+                    <Checkbox
+                        onChange={handleAllTinhTrangDoiSoatChange}
+                        checked={isAllTinhTrangDoiSoatChecked}
+                    >
+                        Tất cả
+                    </Checkbox>
+                    <CheckboxGroup
+                        options={tinhTrangDoiSoatOptions.slice(1)}
+                        value={tinhTrangDoiSoat}
+                        onChange={handleTinhTrangDoiSoatChange}
+                        disabled={disableTinhTrangDoiSoat}
+                    />
+                    <span className={styles.filterLabel}>Loại vé: Vé cổng</span>
+                    <span className={styles.filterLabel}> Ngày bắt đầu: </span>
+                    <RangePicker onChange={handleDateChange} />
+                    <div className={styles.filterItem}>
+                        <Button className={styles.btnfm} onClick={handleFilterData}>
+                            Lọc
+                        </Button>
+                    </div>
+
+
+
+
+
+
+
+                </div>
+
+
+
+
+
+            </div>
+
+
+
         </>
     );
 };
