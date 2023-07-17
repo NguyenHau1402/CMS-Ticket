@@ -1,0 +1,231 @@
+.container{
+    width: 758px;
+    height: 628px;
+    background: #FFFFFF;
+    border-radius: 16px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.headerTitle{
+    margin: 24px 0;
+}
+
+.headerTitle p {
+    font-weight: 700;
+    font-size: 24px;
+    color: #1E0D03;
+}
+
+.nameTicket{
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    margin: 10px 32px;
+}
+
+.statusTicket{
+    text-align: left;
+    margin: 150px 32px;
+}
+
+.labelNameTicket{
+    font-weight: 600;
+    font-size: 16px;
+    color: #1E0D03;
+    opacity: 0.7;
+    text-align: left;
+}
+
+.labelNameTicket span{
+    color: red;
+}
+
+.inputCode{
+    width: 245px;
+    height: 40px;
+    border: 1px solid #A5A8B1;
+    border-radius: 8px;
+    padding: 0 10px;
+}
+
+.inputName{
+    width: 367px;
+    height: 40px;
+    border: 1px solid #A5A8B1;
+    border-radius: 8px;
+    padding: 0 10px;
+}
+
+.priceTicket,
+.dateTicket{
+    width: 400px;
+    height: 80px;
+    margin: 30px 32px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.startTime{
+    width: 280px;
+    height: 70px;
+}
+
+.endTime{
+    width: 280px;
+    height: 70px;
+}
+
+.Time{
+    display: flex;
+    margin: 10px 0;
+}
+
+.TimeLeft{
+    display: flex;
+}
+
+.TimeRight{
+    display: flex;
+    margin: 0 50px;
+}
+
+.Time input{
+    width: 142px;
+    height: 40px;
+    border: 1px solid #A5A8B1;
+    border-radius: 8px;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+/* .Time input:nth-child(2){
+    margin: 0 45px;
+} */
+
+.iconCalendar{
+    margin: 0 -30px;
+    cursor: pointer;
+}
+
+.priceTicket{
+    width: 500px;
+    height: 50px;
+    display: block;
+}
+
+.groupTicket{
+    display: flex;
+    margin: 25px 0;
+    width: 550px;
+}
+
+.unit,
+.titleTicket{
+    margin: 0 10px;
+    font-weight: 500;
+    font-size: 16px;
+    color: #1E0D03;
+    opacity: 0.7;
+}
+
+.checkbox{
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
+}
+
+.priceTicketInput{
+    border: none;
+    width: 148px;
+    height: 40px;
+    background: #F1F4F8;
+    border-radius: 8px;
+    margin: -8px 0;
+    padding: 0 10px;
+}
+
+.priceTicketCombo::placeholder,
+.priceTicketInput::placeholder{
+    color: #A5A8B1;
+}
+
+.unit{
+    margin: 0 5px;
+}
+
+.priceTicketCombo{
+    border: none;
+    margin: -8px 0;
+    width: 72px;
+    height: 40px;
+    background: #F1F4F8;
+    border-radius: 8px;
+}
+
+.select{
+    width: 176px;
+    height: 40px;
+    border: 1px solid #A5A8B1;
+    border-radius: 8px;
+    padding: 0 10px;
+}
+
+.titleBox{
+    display: flex;
+    position: absolute;
+    margin: -80px 35px;
+}
+
+.titleBox span{
+    color: red;
+}
+
+.titleBox p{
+    color: #1E0D03;
+    opacity: 0.4;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.btn{
+    width: 300px;
+    height: 80px;
+    margin: -60px 250px;
+    padding: 25px 0;
+    display: flex;
+}
+
+.btn button{
+    margin: 0 10px;
+    width: 160px;
+    height: 48px;
+    border-radius: 8px;
+}
+
+.btnCancel{
+    border: 1px solid #FF993C;
+    background-color: transparent;
+    color: #FF993C;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.btnSave{
+    border: none;
+    background: #FF993C;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 18px;
+    color: #FFFFFF;
+}
+
+.calendarLeft{
+    margin: -285px 30px;
+}
+
+.calendarRight{
+    margin: -285px 350px;
+}
