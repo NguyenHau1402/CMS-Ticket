@@ -4,7 +4,7 @@ import { Table, Tag, DatePicker, Checkbox, Button, Modal } from "antd";
 import { db } from "../../Firebase-config/firebase-config";
 import { RenderedCell } from "rc-table/lib/interface";
 import styles from "./QuanLyVe.module.css";
-
+import { CSVLink } from "react-csv";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { CheckboxValueType } from "antd/es/checkbox/Group";
 
@@ -65,6 +65,11 @@ const QuanLyVe = () => {
             user.Code.includes(filterInput)
         );
         setSearchResult(results);
+    };
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+            handleSearch();
+        }
     };
 
     const handleDateChange = (dates: any) => {
@@ -156,18 +161,70 @@ const QuanLyVe = () => {
             </Tag>
         );
     };
+    const handleExportToExcel = () => {
+        console.log("Export button clicked");
+        // Chuẩn bị dữ liệu cho file CSV
+        const csvData = searchResult.map((user) => ({
+          // Định dạng dữ liệu cho từng cột
+          STT: user.STT,
+          "Booking code": user.Code,
+          "Số vé": user.SoVe,
+          "Tên sự kiện": user.TenSK,
+          "Tình trạng sử dụng": user.TinhTrangSuDung,
+          "Ngày sử dụng": user.NgaySuDung,
+          "Ngày xuất vé": user.NgayXuatVe,
+          "Cổng check - in": user.CongCheckIn,
+        }));
+      
+        // Định nghĩa các cột cho file CSV
+        const csvHeaders = [
+          { label: "STT", key: "STT" },
+          { label: "Booking code", key: "Booking code" },
+          { label: "Số vé", key: "Số vé" },
+          { label: "Tên sự kiện", key: "Tên sự kiện" },
+          { label: "Tình trạng sử dụng", key: "Tình trạng sử dụng" },
+          { label: "Ngày sử dụng", key: "Ngày sử dụng" },
+          { label: "Ngày xuất vé", key: "Ngày xuất vé" },
+          { label: "Cổng check - in", key: "Cổng check - in" },
+        ];
+      
+        // JSX của nút xuất file CSV
+        const csvLink = (
+          <CSVLink
+            data={csvData}
+            headers={csvHeaders}
+            filename="data.csv"
+            className={styles.btn} // Thêm lớp CSS của Ant Design cho nút
+          >
+            Xuất
+          </CSVLink>
+        );
+      
+        return csvLink;
+      };
 
-    
 
     return (
         <>
-            {/* Button "Lọc" */}
-            <div className={styles.filterButton}>
-                <Button type="primary" onClick={handleFilterButtonClick}>
-                    Lọc
-                </Button>
-                
+            {/* Button "Lọc" và nút "Xuất Excel" */}
+            <div className={styles.searchWrapper}>
+                <div className={styles.search}>
+                    <input
+                        type="text"
+                        value={filterInput}
+                        onChange={handleFilterInputChange}
+                        onKeyDown={handleKeyDown}
+                        placeholder="Tìm bằng số vé..."
+                    />
+                </div>
+                <div className={styles.buttonFilter}>
+                    <button className={styles.btn} onClick={handleFilterButtonClick}>
+                        Lọc
+                    </button>
+                    {handleExportToExcel()}
+                </div>
             </div>
+
 
             <Modal
                 open={showFilter}
@@ -183,20 +240,20 @@ const QuanLyVe = () => {
                     </div>
                     <div className={styles.filterItem}>
                         <label>Tình trạng sử dụng:</label>
-                        <div className="checkboxGroupContainer"> {/* Thêm lớp CSS */}
-                            <Checkbox
-                                onChange={handleAllTinhTrangSuDungChange}
-                                checked={isAllTinhTrangSuDungChecked}
-                            >
-                                Tất cả
-                            </Checkbox>
-                            <CheckboxGroup
-                                options={tinhTrangSuDungOptions.slice(1)}
-                                value={tinhTrangSuDung}
-                                onChange={handleTinhTrangSuDungChange}
-                                disabled={disableTinhTrangSuDung}
-                            />
-                        </div>
+
+                        <Checkbox
+                            onChange={handleAllTinhTrangSuDungChange}
+                            checked={isAllTinhTrangSuDungChecked}
+                        >
+                            Tất cả
+                        </Checkbox>
+                        <CheckboxGroup
+                            options={tinhTrangSuDungOptions.slice(1)}
+                            value={tinhTrangSuDung}
+                            onChange={handleTinhTrangSuDungChange}
+                            disabled={disableTinhTrangSuDung}
+                        />
+
                     </div>
                     <div className={styles.filterItem}>
                         <label>Cổng Check - in:</label>
