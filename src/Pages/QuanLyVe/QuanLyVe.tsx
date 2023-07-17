@@ -7,6 +7,8 @@ import styles from "./QuanLyVe.module.css";
 import { CSVLink } from "react-csv";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { CheckboxValueType } from "antd/es/checkbox/Group";
+import search from './icon/search.svg'
+
 
 const { RangePicker } = DatePicker;
 const CheckboxGroup = Checkbox.Group;
@@ -165,43 +167,43 @@ const QuanLyVe = () => {
         console.log("Export button clicked");
         // Chuẩn bị dữ liệu cho file CSV
         const csvData = searchResult.map((user) => ({
-          // Định dạng dữ liệu cho từng cột
-          STT: user.STT,
-          "Booking code": user.Code,
-          "Số vé": user.SoVe,
-          "Tên sự kiện": user.TenSK,
-          "Tình trạng sử dụng": user.TinhTrangSuDung,
-          "Ngày sử dụng": user.NgaySuDung,
-          "Ngày xuất vé": user.NgayXuatVe,
-          "Cổng check - in": user.CongCheckIn,
+            // Định dạng dữ liệu cho từng cột
+            STT: user.STT,
+            "Booking code": user.Code,
+            "Số vé": user.SoVe,
+            "Tên sự kiện": user.TenSK,
+            "Tình trạng sử dụng": user.TinhTrangSuDung,
+            "Ngày sử dụng": user.NgaySuDung,
+            "Ngày xuất vé": user.NgayXuatVe,
+            "Cổng check - in": user.CongCheckIn,
         }));
-      
+
         // Định nghĩa các cột cho file CSV
         const csvHeaders = [
-          { label: "STT", key: "STT" },
-          { label: "Booking code", key: "Booking code" },
-          { label: "Số vé", key: "Số vé" },
-          { label: "Tên sự kiện", key: "Tên sự kiện" },
-          { label: "Tình trạng sử dụng", key: "Tình trạng sử dụng" },
-          { label: "Ngày sử dụng", key: "Ngày sử dụng" },
-          { label: "Ngày xuất vé", key: "Ngày xuất vé" },
-          { label: "Cổng check - in", key: "Cổng check - in" },
+            { label: "STT", key: "STT" },
+            { label: "Booking code", key: "Booking code" },
+            { label: "Số vé", key: "Số vé" },
+            { label: "Tên sự kiện", key: "Tên sự kiện" },
+            { label: "Tình trạng sử dụng", key: "Tình trạng sử dụng" },
+            { label: "Ngày sử dụng", key: "Ngày sử dụng" },
+            { label: "Ngày xuất vé", key: "Ngày xuất vé" },
+            { label: "Cổng check - in", key: "Cổng check - in" },
         ];
-      
+
         // JSX của nút xuất file CSV
         const csvLink = (
-          <CSVLink
-            data={csvData}
-            headers={csvHeaders}
-            filename="data.csv"
-            className={styles.btn} // Thêm lớp CSS của Ant Design cho nút
-          >
-            Xuất
-          </CSVLink>
+            <CSVLink
+                data={csvData}
+                headers={csvHeaders}
+                filename="data.csv"
+                className={styles.btn} // Thêm lớp CSS của Ant Design cho nút
+            >
+                Xuất file (.csv)
+            </CSVLink>
         );
-      
+
         return csvLink;
-      };
+    };
 
 
     return (
@@ -216,10 +218,13 @@ const QuanLyVe = () => {
                         onKeyDown={handleKeyDown}
                         placeholder="Tìm bằng số vé..."
                     />
+                    <img src={search} alt="logo" className='image' />
+
+
                 </div>
                 <div className={styles.buttonFilter}>
                     <button className={styles.btn} onClick={handleFilterButtonClick}>
-                        Lọc
+                        Lọc vé
                     </button>
                     {handleExportToExcel()}
                 </div>
@@ -305,7 +310,7 @@ const QuanLyVe = () => {
                     style: {
                         position: "fixed",
                         left: "50%",
-                        bottom: "20px",
+                        bottom: "5px",
                         transform: "translateX(-50%)",
                     },
                     itemRender: (page, type, originalElement) => {

@@ -3,8 +3,9 @@ import { BrowserRouter, Link, Routes, Route } from 'react-router-dom';
 import '../MenuBar/MenuBar.css'
 import logo from './icon/logo.svg'
 import DatVe from '../../Pages/DatVe/DatVe';
-import DoiVe from '../../Pages/DoiVe/DoiVe';
+import DoiVe from '../../Pages/DoiSoatVe/DoiSoatVe';
 import GoiVe from '../../Pages/CaiDat/GoiVe';
+import QuanLyVe from '../../Pages/QuanLyVe/QuanLyVe';
 
 const MenuBar = () => {
     const [showData, setShowData] = useState(false);
@@ -128,11 +129,10 @@ const MenuBar = () => {
                                     <div className='ct-1'>
                                         <h2>Danh sách vé</h2>
                                     </div>
-                                    <div className='ct-2'>
-                                        <DatVe></DatVe>
+                                    <div className='ct-2 customDiv'>
+                                        <QuanLyVe></QuanLyVe>
                                     </div>
-                                    <div className='ct-3'>
-                                    </div>
+                                    
                                 </div>
                             </>
 
@@ -167,8 +167,8 @@ const MenuBar = () => {
                 </div>
             </div>
 
-            
-   
+
+
         </BrowserRouter >
     );
 };
