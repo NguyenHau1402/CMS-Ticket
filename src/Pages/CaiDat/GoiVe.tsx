@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { collection, onSnapshot } from "firebase/firestore";
-import { Table, Modal, DatePicker } from "antd";
+import React, { useState, useEffect, ReactNode } from "react";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { Table, Modal, DatePicker, Space, Tag } from "antd";
 import { db } from "../../Firebase-config/firebase-config";
-import styles from "./QuanLyVe.module.css";
+import styles from "./GoiVe.module.css";
 import { CSVLink } from "react-csv";
 import search from './icon/search.svg';
-import AddPackageModal from "./AddPacket";
-
-const { RangePicker } = DatePicker;
+import AddPackageModal from "./AddPacket/AddPacket";
+import { Link, Route, Routes, useParams } from "react-router-dom";
+import UpdatePacket from "./UpdatePacket/UpdatePacket";
 
 const GoiVe = () => {
   const [userList, setUserList] = useState<any[]>([]);
   const [searchResult, setSearchResult] = useState<any[]>([]);
   const [filterInput, setFilterInput] = useState("");
-  const [showFilter, setShowFilter] = useState(false); // Trạng thái hiển thị giao diện phần lọc
-  const [showAddModal, setShowAddModal] = useState(false); // Trạng thái hiển thị giao diện modal thêm gói vé
+  const [showFilter, setShowFilter] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [exportLink, setExportLink] = useState<ReactNode | null>(null);
+
 
   useEffect(() => {
     const colRef = collection(db, "QuanLyVe");
@@ -26,7 +28,6 @@ const GoiVe = () => {
           ...doc.data(),
         });
       });
-      // Sắp xếp dữ liệu theo cột STT
       results.sort((a, b) => {
         const aIndex = parseInt(a.STT);
         const bIndex = parseInt(b.STT);
@@ -35,14 +36,9 @@ const GoiVe = () => {
       setUserList(results);
     });
 
-    // Clean up the subscription
     return () => unsubscribe();
   }, []);
 
-  // Hàm xử lý sự kiện nhấn nút "Lọc"
-  const handleFilterButtonClick = () => {
-    setShowFilter(true);
-  };
 
   const handleCloseModal = () => {
     setShowFilter(false);
@@ -65,62 +61,88 @@ const GoiVe = () => {
     }
   };
 
-  const handleFilterData = () => {
-    let results = [...userList];
-    setSearchResult(results);
-    setShowFilter(false); // Đóng modal sau khi hoàn thành việc lọc
-  };
-
   const handleExportToExcel = () => {
-    console.log("Export button clicked");
-    // Chuẩn bị dữ liệu cho file CSV
-    const csvData = searchResult.map((user) => ({
-      // Định dạng dữ liệu cho từng cột
-      STT: user.STT,
-      "Booking code": user.Code,
-      "Số vé": user.SoVe,
-      "Tên sự kiện": user.TenSK,
-      "Tình trạng sử dụng": user.TinhTrangSuDung,
-      "Ngày sử dụng": user.NgaySuDung,
-      "Ngày xuất vé": user.NgayXuatVe,
-      "Cổng check - in": user.CongCheckIn,
-    }));
+    try {
+      console.log(userList);
+      const csvData = searchResult.map((user) => ({
+        STT: user.STT,
+        "Mã gói": user.Code,
+        "Tên gói vé": user.TenGoiVe,
+        "Ngày áp dụng": user.NgaySuDung,
+        "Ngày hết hạn": user.NgayXuatVe,
+        "Giá vé": user.GiaVe,
+        "Giá Combo": user.GiaCb,
+        "Tình trạng": user.TinhTrang,
+      }));
 
-    // Định nghĩa các cột cho file CSV
-    const csvHeaders = [
-      { label: "STT", key: "STT" },
-      { label: "Booking code", key: "Booking code" },
-      { label: "Số vé", key: "Số vé" },
-      { label: "Tên sự kiện", key: "Tên sự kiện" },
-      { label: "Tình trạng sử dụng", key: "Tình trạng sử dụng" },
-      { label: "Ngày sử dụng", key: "Ngày sử dụng" },
-      { label: "Ngày xuất vé", key: "Ngày xuất vé" },
-      { label: "Cổng check - in", key: "Cổng check - in" },
-    ];
+      const csvHeaders = [
+        { label: "STT", key: "STT" },
+        { label: "Mã gói", key: "Mã gói" },
+        { label: "Tên gói vé", key: "Tên gói vé" },
+        { label: "Ngày áp dụng", key: "Ngày áp dụng" },
+        { label: "Ngày hết hạn", key: "Ngày hết hạn" },
+        { label: "Giá vé", key: "Giá vé" },
+        { label: "Giá Combo", key: "Giá Combo" },
+        { label: "Tình trạng", key: "Tình trạng" },
+      ];
 
-    // JSX của nút xuất file CSV
-    const csvLink = (
-      <CSVLink
-        data={csvData}
-        headers={csvHeaders}
-        filename="data.csv"
-        className={styles.btn} // Thêm lớp CSS của Ant Design cho nút
-      >
-        Xuất file (.csv)
-      </CSVLink>
-    );
+      const csvLink = (
+        <CSVLink
+          data={csvData}
+          headers={csvHeaders}
+          filename="data.csv"
+          className={styles.btn}
+        >
+          Xuất file (.csv)
+        </CSVLink>
+      );
 
-    return csvLink;
+      return csvLink;
+    } catch (error) {
+      console.error("Lỗi khi xuất file CSV:", error);
+      return null;
+    }
   };
+  const renderTinhTrang = (_: any, record: any): ReactNode => {
+    if (!record.TinhTrang || record.TinhTrang.length === 0) {
+        console.log("abc");
+        return null;
+    }
+    let color = record.TinhTrang.length < 4  ? "red" : "green";
+    let tagContent = record.TinhTrang.toUpperCase();
+    return (
+        <Tag color={color} key={record.TinhTrang}>
+            {tagContent}
+        </Tag>
+    );
+};
 
   const handleAddPackage = (values: any) => {
-    // Xử lý thêm gói vé với dữ liệu `values`
     console.log("Thêm gói vé:", values);
+  };
+
+  const formatTimestamp = (timestamp: { seconds: number }) => {
+    const date = new Date(timestamp.seconds * 1000);
+    const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+    return formattedDate;
+  };
+
+  const renderNgaySuDung = (_: any, record: any): React.ReactNode => {
+    if (!record.NgaySuDung) {
+      return null;
+    }
+    return <span>{formatTimestamp(record.NgaySuDung)}</span>;
+  };
+
+  const renderNgayXuatVe = (_: any, record: any): React.ReactNode => {
+    if (!record.NgayXuatVe) {
+      return null;
+    }
+    return <span>{formatTimestamp(record.NgayXuatVe)}</span>;
   };
 
   return (
     <>
-      {/* Button "Lọc" và nút "Xuất Excel" */}
       <div className={styles.searchWrapper}>
         <div className={styles.search}>
           <input
@@ -141,13 +163,12 @@ const GoiVe = () => {
       </div>
 
       <Modal
-        visible={showFilter}
+        open={showFilter}
         onCancel={handleCloseModal}
         footer={null}
         centered
         destroyOnClose
       >
-        {/* Nội dung modal */}
       </Modal>
 
       <AddPackageModal
@@ -162,11 +183,20 @@ const GoiVe = () => {
           { title: "STT", dataIndex: "STT", key: "STT" },
           { title: "Mã gói", dataIndex: "Code", key: "Code" },
           { title: "Tên gói vé", dataIndex: "TenGoiVe", key: "TenGoiVe" },
-          { title: "Ngày áp dụng", dataIndex: "NgayXuatVe", key: "NgayXuatVe" },
-          { title: "Ngày hết hạn", dataIndex: "NgaySuDung", key: "NgaySuDung" },
+          { title: "Ngày áp dụng", dataIndex: "NgaySuDung", key: "NgaySuDung", render: renderNgaySuDung },
+          { title: "Ngày hết hạn", dataIndex: "NgayXuatVe", key: "NgayXuatVe", render: renderNgayXuatVe },
           { title: "Giá vé(VNĐ/Vé)", dataIndex: "GiaVe", key: "GiaVe" },
           { title: "Giá Combo(VNĐ/Combo)", dataIndex: "GiaCb", key: "GiaCb" },
-          { title: "Tình trạng", dataIndex: "TinhTrang", key: "TinhTrang" },
+          { title: "Tình trạng", dataIndex: "TinhTrang", key: "TinhTrang", render: renderTinhTrang },
+          {
+            title: "",
+            key: "action",
+            render: (_, record) => (
+              <Space size="middle">
+                <Link to={`/setting/UpdatePacket/${record.id}`}>Cập nhập</Link>
+              </Space>
+            ),
+          },
         ]}
         rowKey="STT"
         pagination={{
@@ -185,6 +215,13 @@ const GoiVe = () => {
           },
         }}
       />
+
+      <Routes>
+        <Route
+          path="/setting/UpdatePacket/:id"
+          element={<UpdatePacket visible={true} onCancel={() => { }} />}
+        />
+      </Routes>
     </>
   );
 };

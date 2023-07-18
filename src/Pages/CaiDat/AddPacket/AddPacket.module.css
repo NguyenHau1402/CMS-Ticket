@@ -1,0 +1,59 @@
+.nameAdd {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    font-family: "Nunito", sans-serif;
+    margin: 10px 0 0 30px;
+}
+
+.statusDropbar {
+    text-align: left;
+    margin: 120px 0 0 30px;
+}
+
+
+
+.dateAdd {
+    width: 400px;
+    height: 80px;
+    margin: 10px 0 0 30px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btnAdd {
+    width: 400px;
+    height: 80px;
+    margin: 10px 0 0 30px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btnstsAdd {
+    width: 160px;
+    height: 48px;
+    background-color: orange;
+    color: white;
+}
+
+.btnstsCnl {
+    width: 160px;
+    height: 48px;
+    background-color: white;
+    color: orange;
+    border-color: orange;
+
+}
+
+.priceAdd {
+    width: 500px;
+    height: 50px;
+    display: block;
+    margin: 10px 0 0 30px;
+}
+
+.priceAddCheckBox {
+    display: flex;
+    margin: 10px 0 0 30px;
+    width: 350px;
+}

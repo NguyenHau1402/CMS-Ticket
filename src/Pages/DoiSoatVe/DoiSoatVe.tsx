@@ -2,7 +2,7 @@ import React, { useState, useEffect, ReactNode } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { Table, Tag, DatePicker, Checkbox, Button, Modal } from "antd";
 import { db } from "../../Firebase-config/firebase-config";
-import styles from "./QuanLyVe.module.css";
+import styles from "./DoiSoatVe.module.css";
 import { CSVLink } from "react-csv";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { CheckboxValueType } from "antd/es/checkbox/Group";
@@ -31,7 +31,6 @@ const DoiSoatVe = () => {
                     ...doc.data(),
                 });
             });
-            // Sắp xếp dữ liệu theo cột STT
             results.sort((a, b) => {
                 const aIndex = parseInt(a.STT);
                 const bIndex = parseInt(b.STT);
@@ -40,11 +39,9 @@ const DoiSoatVe = () => {
             setUserList(results);
         });
 
-        // Clean up the subscription
         return () => unsubscribe();
     }, []);
 
-    // Hàm xử lý sự kiện nhấn nút "Lọc"
 
     const handleFilterInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFilterInput(e.target.value);
@@ -86,7 +83,6 @@ const DoiSoatVe = () => {
     const handleFilterData = () => {
         let results = [...userList];
 
-        // Lọc theo khoảng ngày
         if (dateRange && dateRange.length === 2) {
             results = results.filter((user) => {
                 const ngaySuDung = user.NgaySuDung;
@@ -97,10 +93,6 @@ const DoiSoatVe = () => {
             });
         }
 
-        // Lọc theo tình trạng sử dụng
-
-
-        // Lọc theo cổng check-in
         if (tinhTrangDoiSoat && tinhTrangDoiSoat.length > 0) {
             results = results.filter((user) =>
                 tinhTrangDoiSoat.includes(user.TinhTrangDoiSoat)
@@ -113,9 +105,7 @@ const DoiSoatVe = () => {
 
     const handleExportToExcel = () => {
         console.log("Export button clicked");
-        // Chuẩn bị dữ liệu cho file CSV
         const csvData = searchResult.map((user) => ({
-            // Định dạng dữ liệu cho từng cột
             STT: user.STT,
             "Số vé": user.SoVe,
 
@@ -125,7 +115,6 @@ const DoiSoatVe = () => {
             "Tình trạng đổi soát": user.TinhTrangDoiSoat,
         }));
 
-        // Định nghĩa các cột cho file CSV
         const csvHeaders = [
             { label: "STT", key: "STT" },
 
@@ -136,13 +125,12 @@ const DoiSoatVe = () => {
             { label: "Tình trạng đổi soát", key: "Tình trạng đổi soát" },
         ];
 
-        // JSX của nút xuất file CSV
         const csvLink = (
             <CSVLink
                 data={csvData}
                 headers={csvHeaders}
                 filename="data.csv"
-                className={styles.btn} // Thêm lớp CSS của Ant Design cho nút
+                className={styles.btn} 
             >
                 Xuất file (.csv)
             </CSVLink>
@@ -151,10 +139,30 @@ const DoiSoatVe = () => {
         return csvLink;
     };
 
+    const formatTimestamp = (timestamp: { seconds: number }) => {
+        const date = new Date(timestamp.seconds * 1000);
+        const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        return formattedDate;
+    };
+
+    const renderNgaySuDung = (_: any, record: any): React.ReactNode => {
+        if (!record.NgaySuDung) {
+            return null;
+        }
+        return <span>{formatTimestamp(record.NgaySuDung)}</span>;
+    };
+
+    const renderNgayXuatVe = (_: any, record: any): React.ReactNode => {
+        if (!record.NgayXuatVe) {
+            return null;
+        }
+        return <span>{formatTimestamp(record.NgayXuatVe)}</span>;
+    };
+
+
 
     return (
         <>
-            {/* Button "Lọc" và nút "Xuất Excel" */}
             <div className={styles.searchWrapper}>
                 <div className={styles.search}>
                     <input
@@ -179,7 +187,7 @@ const DoiSoatVe = () => {
                         columns={[
                             { title: "STT", dataIndex: "STT", key: "STT" },
                             { title: "Số vé", dataIndex: "SoVe", key: "SoVe" },
-                            { title: "Ngày sử dụng", dataIndex: "NgaySuDung", key: "NgaySuDung" },
+                            { title: "Ngày áp dụng", dataIndex: "NgaySuDung", key: "NgaySuDung", render: renderNgaySuDung },
                             { title: "Tên loại vé", dataIndex: "LoaiVe", key: "LoaiVe" },
                             { title: "Cổng check - in", dataIndex: "CongCheckIn", key: "CongCheckIn" },
                             {

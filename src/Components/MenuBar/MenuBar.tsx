@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter, Link, Routes, Route } from 'react-router-dom';
 import '../MenuBar/MenuBar.css'
 import logo from './icon/logo.svg'
+import trangchu from './icon/trangchu.svg'
 import DoiVe from '../../Pages/DoiSoatVe/DoiSoatVe';
 import GoiVe from '../../Pages/CaiDat/GoiVe';
 import QuanLyVe from '../../Pages/QuanLyVe/QuanLyVe';
@@ -107,11 +108,9 @@ const MenuBar = () => {
                         <Route path="/" element={
                             <>
                                 <div className='content-inside'>
-                                    <div className='ct-1'>
-                                        <h2>Trang chủ</h2>
-                                    </div>
+                                    
                                     <div className='ct-2'>
-                                        <p>đây là trang chủ</p>
+                                    <img src={trangchu} alt="trangchu" className='image' />
                                     </div>
                                     <div className='ct-3'>
                                         <div className='add-btn'>

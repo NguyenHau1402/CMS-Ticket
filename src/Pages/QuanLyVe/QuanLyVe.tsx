@@ -24,7 +24,8 @@ const QuanLyVe = () => {
     const [congCheckIn, setCongCheckIn] = useState<CheckboxValueType[]>([]);
     const [disableCongCheckIn, setDisableCongCheckIn] = useState(false);
     const [isAllCongChecked, setIsAllCongChecked] = useState(false);
-    const [showFilter, setShowFilter] = useState(false); // Trạng thái hiển thị giao diện phần lọc
+    const [showFilter, setShowFilter] = useState(false); 
+
 
     useEffect(() => {
         const colRef = collection(db, "QuanLyVe");
@@ -36,7 +37,6 @@ const QuanLyVe = () => {
                     ...doc.data(),
                 });
             });
-            // Sắp xếp dữ liệu theo cột STT
             results.sort((a, b) => {
                 const aIndex = parseInt(a.STT);
                 const bIndex = parseInt(b.STT);
@@ -45,11 +45,9 @@ const QuanLyVe = () => {
             setUserList(results);
         });
 
-        // Clean up the subscription
         return () => unsubscribe();
     }, []);
 
-    // Hàm xử lý sự kiện nhấn nút "Lọc"
     const handleFilterButtonClick = () => {
         setShowFilter(true);
     };
@@ -118,7 +116,6 @@ const QuanLyVe = () => {
     const handleFilterData = () => {
         let results = [...userList];
 
-        // Lọc theo khoảng ngày
         if (dateRange && dateRange.length === 2) {
             results = results.filter((user) => {
                 const ngaySuDung = user.NgaySuDung;
@@ -129,14 +126,12 @@ const QuanLyVe = () => {
             });
         }
 
-        // Lọc theo tình trạng sử dụng
         if (tinhTrangSuDung && tinhTrangSuDung.length > 0) {
             results = results.filter((user) =>
                 tinhTrangSuDung.includes(user.TinhTrangSuDung)
             );
         }
 
-        // Lọc theo cổng check-in
         if (congCheckIn && congCheckIn.length > 0) {
             results = results.filter((user) =>
                 congCheckIn.includes(user.CongCheckIn)
@@ -144,7 +139,7 @@ const QuanLyVe = () => {
         }
 
         setSearchResult(results);
-        setShowFilter(false); // Đóng modal sau khi hoàn thành việc lọc
+        setShowFilter(false); 
     };
 
     const renderTinhTrangSuDung = (_: any, record: any): ReactNode => {
@@ -163,11 +158,30 @@ const QuanLyVe = () => {
             </Tag>
         );
     };
+    const formatTimestamp = (timestamp: { seconds: number; }) => {
+        const date = new Date(timestamp.seconds * 1000);
+        const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        return formattedDate;
+    };
+
+
+    const renderNgaySuDung = (_: any, record: any): React.ReactNode => {
+        if (!record.NgaySuDung) {
+            return null;
+        }
+        return <span>{formatTimestamp(record.NgaySuDung)}</span>;
+    };
+
+    const renderNgayXuatVe = (_: any, record: any): React.ReactNode => {
+        if (!record.NgayXuatVe) {
+            return null;
+        }
+        return <span>{formatTimestamp(record.NgayXuatVe)}</span>;
+    };
+
     const handleExportToExcel = () => {
         console.log("Export button clicked");
-        // Chuẩn bị dữ liệu cho file CSV
         const csvData = searchResult.map((user) => ({
-            // Định dạng dữ liệu cho từng cột
             STT: user.STT,
             "Booking code": user.Code,
             "Số vé": user.SoVe,
@@ -178,7 +192,6 @@ const QuanLyVe = () => {
             "Cổng check - in": user.CongCheckIn,
         }));
 
-        // Định nghĩa các cột cho file CSV
         const csvHeaders = [
             { label: "STT", key: "STT" },
             { label: "Booking code", key: "Booking code" },
@@ -190,13 +203,12 @@ const QuanLyVe = () => {
             { label: "Cổng check - in", key: "Cổng check - in" },
         ];
 
-        // JSX của nút xuất file CSV
         const csvLink = (
             <CSVLink
                 data={csvData}
                 headers={csvHeaders}
                 filename="data.csv"
-                className={styles.btn} // Thêm lớp CSS của Ant Design cho nút
+                className={styles.btn} 
             >
                 Xuất file (.csv)
             </CSVLink>
@@ -206,9 +218,9 @@ const QuanLyVe = () => {
     };
 
 
+
     return (
         <>
-            {/* Button "Lọc" và nút "Xuất Excel" */}
             <div className={styles.searchWrapper}>
                 <div className={styles.search}>
                     <input
@@ -283,6 +295,7 @@ const QuanLyVe = () => {
             </Modal>
 
 
+
             <Table
                 dataSource={searchResult.length > 0 ? searchResult : userList}
                 columns={[
@@ -298,10 +311,10 @@ const QuanLyVe = () => {
                             value: any,
                             record: any,
                             index: number
-                        ) => ReactNode | RenderedCell<any>,
+                        ) => React.ReactNode | RenderedCell<any>,
                     },
-                    { title: "Ngày sử dụng", dataIndex: "NgaySuDung", key: "NgaySuDung" },
-                    { title: "Ngày xuất vé", dataIndex: "NgayXuatVe", key: "NgayXuatVe" },
+                    { title: "Ngày sử dụng", dataIndex: "NgayXuatVe", key: "NgayXuatVe", render: renderNgayXuatVe },
+                    { title: "Ngày xuất vé", dataIndex: "NgaySuDung", key: "NgaySuDung", render: renderNgaySuDung },
                     { title: "Cổng check - in", dataIndex: "CongCheckIn", key: "CongCheckIn" },
                 ]}
                 rowKey="MaTB"
